@@ -4,7 +4,7 @@ A comprehensive image analysis tool that uses multiple deep learning models to a
 
 Issues
 The model URLs are hardcoded - these might be better as configuration parameters
-The confidence threshold (0.5) in detect_objects() is hardcoded - this could be a configurable parameter
+The confidence threshold (0.5) in detect_objects() is hardcoded 
 The image preprocessing is slightly different between detection and classification - you might want to standardize this
 The imagenet_labels.txt file path is hardcoded and could fail if not present
 
