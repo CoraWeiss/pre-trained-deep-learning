@@ -2,9 +2,11 @@
 
 A comprehensive image analysis tool that uses multiple deep learning models to automatically analyze, classify, and extract information from images. The system processes images in batch and provides outputs in both CSV and JSON formats for easy analysis.
 
-## Introduction to AI Models Used
-
-This pipeline combines three specialized deep learning models, each designed to understand different aspects of image content:
+Issues
+The model URLs are hardcoded - these might be better as configuration parameters
+The confidence threshold (0.5) in detect_objects() is hardcoded - this could be a configurable parameter
+The image preprocessing is slightly different between detection and classification - you might want to standardize this
+The imagenet_labels.txt file path is hardcoded and could fail if not present
 
 ### 1. Object Detection (SSD MobileNet V2)
 Think of this model as our "object spotter." It scans the entire image and can find multiple objects simultaneously, telling us:
