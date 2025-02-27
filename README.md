@@ -163,6 +163,4 @@ The analyzer provides several customization options:
 
 This project uses TensorFlow Hub models which are licensed under the Apache License 2.0.
 
-## Contributing
 
-Feel free to submit issues and enhancement requests!
