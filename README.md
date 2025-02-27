@@ -1,20 +1,31 @@
-# Image Classifier
+# Image Analyzer
 
-A Python-based image classification tool that uses Google's EfficientNetV2 model to classify images according to ImageNet categories.
+A comprehensive Python-based image analysis tool that combines object detection, classification, and feature extraction using TensorFlow Hub models.
 
 ## Features
 
-- Uses TensorFlow and TensorFlow Hub for efficient image classification
-- Leverages pre-trained EfficientNetV2-B0 model
-- Processes both single images and entire directories
-- Outputs classification results to CSV with confidence scores
-- Automatically downloads and caches ImageNet labels
-- Progress tracking for batch processing
+- **Multiple Analysis Capabilities:**
+  - Object detection using SSD MobileNet
+  - Image classification using EfficientNetV2/MobileNet
+  - Feature extraction for advanced analysis
+- **Flexible Processing:**
+  - Analyzes single images or entire directories
+  - Detailed logging of the analysis process
+  - Configurable confidence thresholds
+- **Robust Implementation:**
+  - Comprehensive error handling
+  - Progress tracking with intermediate result saving
+  - Detailed logging system
+  - Memory-efficient processing
+- **Rich Output:**
+  - Generates detailed JSON results
+  - Provides summary statistics of detected objects
+  - Lists top classifications by confidence
 
 ## Prerequisites
 
 ```bash
-pip install tensorflow tensorflow-hub requests
+pip install tensorflow tensorflow-hub pillow numpy requests
 ```
 
 ## Usage
@@ -25,115 +36,132 @@ pip install tensorflow tensorflow-hub requests
 2. Run the script:
 
 ```bash
-python image_classifier.py
+python image_analyzer.py
 ```
 
 The script will:
-- Process all JPG/JPEG images in the current directory
-- Generate a CSV file with results (format: `classifications_YYYYMMDD_HHMMSS.csv`)
+- Process all image files in the current directory
+- Generate a JSON file with results (format: `image_analysis_YYYYMMDD_HHMMSS.json`)
+- Create a log file with detailed processing information
 - Show progress as it processes images
 
-### Class Usage
+### Advanced Usage
 
-You can also import and use the `ImageClassifier` class in your own code:
+You can also import and use the `ImageAnalyzer` class in your own code:
 
 ```python
-from image_classifier import ImageClassifier
+from image_analyzer import ImageAnalyzer
 
-# Initialize the classifier
-classifier = ImageClassifier()
+# Initialize the analyzer with custom confidence threshold
+analyzer = ImageAnalyzer(confidence_threshold=0.4)
 
-# Classify a single image
-result = classifier.classify_image('path/to/image.jpg')
+# Analyze a single image
+result = analyzer.analyze_image('path/to/image.jpg')
 print(result)
 
-# Process an entire directory
-classifier.process_directory('path/to/directory')
+# Process an entire directory with custom batch size
+results = analyzer.analyze_directory('path/to/directory', batch_size=20)
+
+# Get top classifications from results
+top_classes = analyzer.get_top_classifications(results, top_n=5)
+for item in top_classes:
+    print(f"{item['image']}: {item['subject']} (confidence: {item['confidence']:.4f})")
 ```
 
 ## Output Format
 
-The script generates a CSV file with the following columns:
-- `image`: Filename of the processed image
-- `subject`: Predicted classification label
-- `confidence`: Confidence score (0-1) for the prediction
+The script generates a JSON file with comprehensive analysis for each image:
 
-## Example Output
-
-### Command Line Execution
-When you run the script, you'll see progress updates like this:
-```bash
-$ python image_classifier.py
-Loading model...
-Progress: 1/5 (20.0%)
-Progress: 2/5 (40.0%)
-Progress: 3/5 (60.0%)
-Progress: 4/5 (80.0%)
-Progress: 5/5 (100.0%)
-Results saved to classifications_20240218_143022.csv
-```
-
-### Output CSV File
-The generated CSV file (`classifications_20240218_143022.csv`) will look like this:
-```csv
-image,subject,confidence
-cat.jpg,tabby cat,0.92
-dog.jpg,golden retriever,0.87
-bird.jpg,house finch,0.78
-car.jpg,sports car,0.95
-flower.jpg,daisy,0.89
-```
-
-### Python Code Output
-When using the classifier in your own code:
-```python
->>> from image_classifier import ImageClassifier
->>> classifier = ImageClassifier()
-Loading model...
->>> result = classifier.classify_image('cat.jpg')
->>> print(result)
+```json
 {
-    'image': 'cat.jpg',
-    'subject': 'tabby cat',
-    'confidence': 0.92
+  "example.jpg": {
+    "image_info": {
+      "filename": "example.jpg",
+      "size": [800, 600],
+      "mode": "RGB",
+      "format": "JPEG"
+    },
+    "objects_detected": [
+      {
+        "object": "person",
+        "confidence": 0.92,
+        "location": [0.1, 0.2, 0.5, 0.8]
+      },
+      {
+        "object": "car",
+        "confidence": 0.87,
+        "location": [0.6, 0.3, 0.9, 0.7]
+      }
+    ],
+    "classification": {
+      "main_subject": "street scene",
+      "confidence": 0.79
+    },
+    "feature_vector_length": 1280
+  }
 }
 ```
 
 ## Technical Details
 
-### Model Information
-- Uses EfficientNetV2-B0 model from TensorFlow Hub
-- Input images are resized to 224x224 pixels
-- Pixel values are normalized to 0-1 range
-- Predictions are made against 1000 ImageNet classes
+### Models Used
+
+- **Object Detection:** SSD MobileNet v2 (fast, general-purpose detection)
+- **Classification:** MobileNet v2 or EfficientNet v2 (configurable)
+- **Feature Extraction:** MobileNet v2 feature vector
 
 ### Image Processing
-- Supports JPG/JPEG formats
-- Images are automatically resized and normalized
+
+- Supports JPG, JPEG, PNG, and GIF formats
+- Images are automatically resized and normalized for each model
 - Error handling for corrupted or invalid images
-- Memory-efficient processing of one image at a time
+- Memory-efficient processing with batched saving
+
+### Logging System
+
+- Comprehensive logging to both console and file
+- Detailed error messages and tracebacks
+- Progress updates during batch processing
+- Summary statistics upon completion
 
 ## Error Handling
 
-The script includes error handling for:
-- Missing image files
-- Corrupted images
-- Network issues during model/label download
-- Invalid directories
-- File permission issues
+The analyzer includes robust error handling for:
 
-Failed image classifications are logged but don't halt batch processing.
+- Missing or corrupted image files
+- Model loading failures
+- Preprocessing issues
+- File access or permission problems
+- Network connectivity issues
+
+Failed image analyses are logged but don't halt batch processing.
+
+## Performance Considerations
+
+- Processing large images or directories can be memory-intensive
+- Feature vectors are summarized by default to save memory
+- Intermediate results are saved periodically to prevent data loss
+- Models are loaded once and reused for efficiency
+
+## Customization Options
+
+The analyzer provides several customization options:
+
+- Adjustable confidence threshold for object detection
+- Configurable batch size for directory processing
+- Option to include or exclude full feature vectors
+- Alternative models can be specified in the initialization
 
 ## Limitations
 
-- Only processes JPG/JPEG images
-- Requires internet connection for first-time setup
+- Requires TensorFlow and sufficient RAM for model loading
 - Classification limited to ImageNet categories
-- Single-label classification only (no multi-label support)
+- Internet connection required for first-time model download
+- Processing speed depends on hardware capabilities
 
 ## License
 
-This project uses the EfficientNetV2 model which is licensed under the Apache License 2.0.
+This project uses TensorFlow Hub models which are licensed under the Apache License 2.0.
 
 ## Contributing
 
