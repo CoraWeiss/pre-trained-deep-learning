@@ -1,0 +1,23 @@
+Top 10 classifications by frequency:
+mask: 195 images (avg confidence: 0.5372)
+jigsaw puzzle: 49 images (avg confidence: 0.3639)
+comic book: 46 images (avg confidence: 0.3800)
+book jacket: 27 images (avg confidence: 0.2972)
+prayer rug: 15 images (avg confidence: 0.3167)
+paintbrush: 12 images (avg confidence: 0.2664)
+pillow: 11 images (avg confidence: 0.2967)
+Christmas stocking: 10 images (avg confidence: 0.3556)
+wig: 10 images (avg confidence: 0.3436)
+teddy: 10 images (avg confidence: 0.1453)
+
+Top 10 most confident classifications:
+1. 2015-12-06_20-27-56_UTC.jpg: mask (confidence: 0.9991)
+2. 2014-12-21_20-35-00_UTC.jpg: mask (confidence: 0.9970)
+3. 2015-09-25_05-04-23_UTC.jpg: mask (confidence: 0.9960)
+4. 2014-11-30_17-43-12_UTC.jpg: mask (confidence: 0.9943)
+5. 2015-09-07_23-11-01_UTC.jpg: mask (confidence: 0.9920)
+6. 2015-08-09_05-02-28_UTC.jpg: mask (confidence: 0.9879)
+7. 2015-09-14_22-05-42_UTC.jpg: mask (confidence: 0.9850)
+8. 2018-07-07_18-55-00_UTC_1.jpg: mask (confidence: 0.9831)
+9. 2015-01-17_21-32-19_UTC.jpg: mask (confidence: 0.9801)
+10. 2018-03-01_22-23-43_UTC.jpg: mask (confidence: 0.9767)
